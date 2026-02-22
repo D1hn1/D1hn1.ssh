@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include "../include/info.h"
 #include "../include/about.h"
+#include "../include/loading.h"
 
 enum {
 	WIN_INFO,
@@ -77,6 +78,9 @@ int main(void) {
 	int WIN_HEIGHT = 26;
 	int WIN_X 	   = (COLS / 2)  - (WIN_WIDTH / 2);
 	int WIN_Y	   = (LINES / 2) - (WIN_HEIGHT / 2);
+
+	// Loading screen
+	load_anim(root);
 
 	// Draw decorations
 	wmove(root, LINES - 1, 0);
