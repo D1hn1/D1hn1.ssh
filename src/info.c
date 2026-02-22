@@ -67,46 +67,21 @@ void draw_bold(WINDOW *win, const char *text) {
 	wattroff(win, A_BOLD);
 }
 
+void draw_text(WINDOW *win, size_t height, int y, int x, const char *text[], bool bold) {
+	for (size_t i = 0; i < height; i++) {
+		wmove(win, y + i, x);
+		if (bold && i == 0) {
+			draw_bold(win, text[i]);
+			continue;
+		}
+		wprintw(win, "%s", text[i]);
+	}
+}
+
 void buffer_info(WINDOW *win) {
-	// Draw title
-	for (size_t i = 0; i < TITLE_HEIGHT; i++) {
-		wmove(win, i + 1, 2);
-		wprintw(win, "%s", TITLE[i]);
-	}
-	// Draw profesional profile
-	for (size_t i = 0; i < PRO_PROFILE_HEIGHT; i++) {
-		wmove(win, TITLE_HEIGHT + i + 2, 2);
-		if (i == 0) {
-			draw_bold(win, PRO_PROFILE[i]);
-			continue;
-		}
-		wprintw(win, "%s", PRO_PROFILE[i]);
-	}
-	// Draw technologies
-	for (size_t i = 0; i < TECHNOLOGIES_HEIGHT; i++) {
-		wmove(win, TITLE_HEIGHT + PRO_PROFILE_HEIGHT + 3 + i, 2);
-		if (i == 0) {
-			draw_bold(win, TECHNOLOGIES[i]);
-			continue;
-		}
-		wprintw(win, "%s", TECHNOLOGIES[i]);
-	}
-	// Draw contact
-	for (size_t i = 0; i < CONTACT_HEIGHT; i++) {
-		wmove(win, 2 + i, 60);
-		if (i == 0) {
-			draw_bold(win, CONTACT[i]);
-			continue;
-		}
-		wprintw(win, "%s", CONTACT[i]);
-	}
-	// Draw projects
-	for (size_t i = 0; i < PROJECTS_HEIGHT; i++) {
-		wmove(win, TITLE_HEIGHT + i + 2, 60);
-		if (i == 0) {
-			draw_bold(win, PROJECTS[i]);
-			continue;
-		}
-		wprintw(win, "%s", PROJECTS[i]);
-	}
+	draw_text(win, TITLE_HEIGHT, 1, 2, TITLE, false);
+	draw_text(win, PRO_PROFILE_HEIGHT, TITLE_HEIGHT + 2, 2, PRO_PROFILE, true);
+	draw_text(win, TECHNOLOGIES_HEIGHT, TITLE_HEIGHT + PRO_PROFILE_HEIGHT + 3, 2, TECHNOLOGIES, true);
+	draw_text(win, CONTACT_HEIGHT, 2, 60, CONTACT, true);
+	draw_text(win, PROJECTS_HEIGHT, TITLE_HEIGHT + 2, 60, PROJECTS, true);
 }
