@@ -3,7 +3,7 @@
 
 // Info buffer vars
 #define TITLE_HEIGHT 8
-#define CONTACT_HEIGHT 4
+#define CONTACT_HEIGHT 5
 #define PROJECTS_HEIGHT 13
 #define PRO_PROFILE_HEIGHT 7
 #define TECHNOLOGIES_HEIGHT 6
@@ -39,10 +39,11 @@ const char *TECHNOLOGIES[TECHNOLOGIES_HEIGHT] = {
 };
 
 const char *CONTACT[CONTACT_HEIGHT] = {
-	"CONTACT",
+	"LINKS",
 	"",
-	"https://www.linkedin.com/in/dahnils",
 	"https://github.com/d1hn1",
+	"https://www.linkedin.com/in/dahnils",
+	"https://www.credly.com/users/dahnils",
 };
 
 const char *PROJECTS[PROJECTS_HEIGHT] = {

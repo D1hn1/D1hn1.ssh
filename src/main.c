@@ -16,7 +16,7 @@ int WINDOW_MAX = 2;
 bool RUNNING   = true;
 
 #define PAGER "<- %d/%d ->"
-#define DOMAIN "dahni.local"
+#define DOMAIN "tbdf.com"
 #define CONTROLS "^c (exit) h (left) l (right) b (begin) wasd (snake controls) r (reset)"
 
 void window_switcher(WINDOW *win) {

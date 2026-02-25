@@ -5,7 +5,7 @@
 
 const char *ABOUT_TEXT[ABOUT_HEIGHT] = {
 	"  Ncurses page made in C for ssh",
-	"D1hn1 <daniellopezsantiago27@gmailcom>",
+	"D1hn1 <tobedefinedlater@gmail.com>",
 	"   2026(C). All rights reserved.",
 };
 
