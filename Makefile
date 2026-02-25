@@ -1,8 +1,10 @@
-bin/main: src/main.c src/info.c src/about.c src/loading.c
+SRCS := $(wildcard ./src/*.c)
+
+bin/main: $(SRCS) 
 	mkdir -p bin/
 	cc -o bin/main    \
 		-Wall -Wextra \
-		src/main.c src/info.c src/about.c src/loading.c \
+		$(SRCS) \
 	    -lncurses
 
 clear:

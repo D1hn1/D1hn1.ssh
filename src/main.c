@@ -1,8 +1,18 @@
 #include <stdio.h>
 #include <ncurses.h>
 #include "../include/info.h"
+#include "../include/game.h"
 #include "../include/about.h"
 #include "../include/loading.h"
+
+// -*- TODO -*-
+//
+// CHECK WALLS.
+// ADD SCORE COUNT.
+// ADD ALL OF THE CONTROLS ON THE BOTTOM.
+// CHECK THAT THE HEAD IS NOT ON THE BODY.
+// CHECK THAT FOOD DOESNT APPEAR ON THE SNAKE.
+// CHECK THAT FOOD DESNT APPEAR OUTSIDE THE SQUARE.
 
 enum {
 	WIN_INFO,
@@ -27,9 +37,8 @@ void window_switcher(WINDOW *win) {
 			break;
 
 		case WIN_SNAKE:
-			wclear(win);
-			wmove(win, 1, 1);
-			wprintw(win, "Snake");
+			werase(win);
+			buffer_game(win);
 			break;
 
 		case WIN_ABOUT:
@@ -49,13 +58,36 @@ void handle_input(int input) {
 			if (WINDOW_NUM != 0) {
 				WINDOW_NUM--;
 			}
+			RESUME = true;
 			break;
 
 		case 'l':
 			if (WINDOW_NUM != WINDOW_MAX) {
 				WINDOW_NUM++;
 			}
+			RESUME = true;
 			break;
+
+		// Game inputs
+		case 'b':
+			RESUME = false;
+			break;
+		case 'w':
+			UP = true;
+			break;
+		case 'a':
+			LEFT = true;
+			break;
+		case 's':
+			DOWN = true;
+			break;
+		case 'd':
+			RIGHT = true;
+			break;
+		case 'r':
+			SETUP = true;
+			break;
+		// Game inputs
 
 		case KEY_EXIT:
 			RUNNING = false;
@@ -107,6 +139,9 @@ int main(void) {
 		wrefresh(win);
 		
 		// Handle input
+		timeout(-1);
+		if (WINDOW_NUM == WIN_SNAKE)
+			timeout(150);
 		int input = getch();
 		handle_input(input);
 	}
