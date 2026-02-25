@@ -5,15 +5,6 @@
 #include "../include/about.h"
 #include "../include/loading.h"
 
-// -*- TODO -*-
-//
-// CHECK WALLS.
-// ADD SCORE COUNT.
-// ADD ALL OF THE CONTROLS ON THE BOTTOM.
-// CHECK THAT THE HEAD IS NOT ON THE BODY.
-// CHECK THAT FOOD DOESNT APPEAR ON THE SNAKE.
-// CHECK THAT FOOD DESNT APPEAR OUTSIDE THE SQUARE.
-
 enum {
 	WIN_INFO,
 	WIN_SNAKE,
@@ -26,7 +17,7 @@ bool RUNNING   = true;
 
 #define PAGER "<- %d/%d ->"
 #define DOMAIN "dahni.local"
-#define CONTROLS "^c (exit) h (left) l (right) enter (enter)"
+#define CONTROLS "^c (exit) h (left) l (right) b (begin) wasd (snake controls) r (reset)"
 
 void window_switcher(WINDOW *win) {
 	switch (WINDOW_NUM) {

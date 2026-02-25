@@ -41,6 +41,23 @@ darray array;
 snake_food food;
 const char *RESUME_TEXT = "Press B to begin";
 
+void random_food(darray *array, snake_food *food, int WIDTH, int HEIGHT) {
+	int x = rand() % (WIDTH);
+	int y = rand() % (HEIGHT);
+	for (size_t i = 0; i < array->length; i++) {
+		snake_part *actual_sp = darray_at(array, i);
+		bool collision = (actual_sp->x == x && actual_sp->y == y) ||
+						 (x <= 0) || (x >= (WIDTH - 1))  ||
+						 (y <= 0) || (y >= (HEIGHT - 1));
+		if (collision) {
+			random_food(array, food, WIDTH, HEIGHT);
+			return;
+		}
+	}
+	food->x = x;
+	food->y = y;
+}
+
 void update_head(snake_part *actual_sp) {
 	if (UP) { 
 		UP = false;
@@ -102,10 +119,8 @@ void apply_direction(snake_part *actual_sp) {
 	actual_sp->y += actual_sp->yv;
 }
 
-void check_food(darray *array, snake_food *food, snake_part *head, int width, int height) {
+void check_eaten(darray *array, snake_food *food, snake_part *head, int width, int height) {
 	if ((food->x == head->x) && (food->y == head->y)) {
-		food->x = rand() % width;
-		food->y = rand() % height;
 
 		snake_part *body = malloc(sizeof(snake_part));
 		*body = (snake_part){
@@ -114,8 +129,34 @@ void check_food(darray *array, snake_food *food, snake_part *head, int width, in
 			.xv = head->xv,
 			.yv = head->yv,
 		};
-
 		darray_push(array, body);
+
+		random_food(array, food, width, height); // Create food after to not interfer with new body
+	}
+}
+
+void check_collisions(darray *array, snake_part *head, int HEIGHT, int WIDTH) {
+	// Check walls
+	bool outside = (head->x >= (WIDTH - 1)) ||
+				   (head->x <= 0)           ||
+				   (head->y >= (HEIGHT - 1))||
+				   (head->y <= 0);
+	if (outside) {
+		SETUP = true;
+		RESUME = true;
+		return;
+	}
+	// Check head in body
+	if (array->length > 1) {
+		for (size_t i = 1; i < array->length; i++) {
+			snake_part *body = darray_at(array, i);
+			bool collision = (head->x == body->prevx) &&
+							 (head->y == body->prevy);
+			if (collision) {
+				SETUP = true;
+				RESUME = true;
+			}
+		}
 	}
 }
 
@@ -133,6 +174,7 @@ void buffer_game(WINDOW *win) {
 		// Destroy if reset
 		darray_destroy(&array);
 		array = darray_init();
+		// Create snake head
 		snake_part *head = malloc(sizeof(snake_part));
 		*head = (snake_part){
 			.x = WIDTH / 2,
@@ -141,10 +183,12 @@ void buffer_game(WINDOW *win) {
 			.yv = 0,
 		};
 		darray_push(&array, head);
+		// Create snake food
 		food = (snake_food){
-			.x = rand() % WIDTH,
-			.y = rand() % HEIGHT,
+			.x = 0,
+			.y = 0,
 		};
+		random_food(&array, &food, WIDTH, HEIGHT);
 
 	}
 
@@ -168,7 +212,8 @@ void buffer_game(WINDOW *win) {
 				update_head(actual_sp);
 				apply_direction(actual_sp);
 				// Check for food
-				check_food(&array, &food, actual_sp, WIDTH, HEIGHT);
+				check_eaten(&array, &food, actual_sp, WIDTH, HEIGHT);
+				check_collisions(&array, actual_sp, HEIGHT, WIDTH);
 				draw_snake(win, actual_sp, true);
 			} else {
 				apply_direction(actual_sp);
